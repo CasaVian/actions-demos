@@ -1,0 +1,17 @@
+name: Tester
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "**" ]
+    paths:
+    - 'trigger/dumper'
+  pull_request:
+    branches: [ "**" ]
+    paths:
+    - 'trigger/dumper'
+  workflow_dispatch:
+
+jobs:
+  the-job:
+    uses: CasaVian/actions-demos/.github/workflows/context-dumper.yml@main
