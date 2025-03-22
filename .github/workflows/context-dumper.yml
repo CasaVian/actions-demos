@@ -1,15 +1,7 @@
 name: Context Dumper
 
 on:
-  push:
-    branches: [ "**" ]
-    paths:
-    - 'trigger/dumper'
-  pull_request:
-    branches: [ "**" ]
-    paths:
-    - 'trigger/dumper'
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
   build:
