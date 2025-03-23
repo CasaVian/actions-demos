@@ -1,60 +1,124 @@
+> TODO: check `github` context from a called workflow  
+> NOTE: team can opt for a specific pattern via an input parameter
 
-# Scenario 4 - feature
-
-```mermaid
----
-title: |
-  policies:
-    feature/* = quick,
-    PR-* = PR-validation,
-    main = full
----
-gitGraph
-   commit id:"1 - initial state"
-   branch feature/X
-   checkout feature/X
-   commit id:"2"
-   commit id:"3"
-   branch PR-1
-   checkout feature/X
-   commit id:"4"
-   checkout PR-1
-   commit id:"3 (FF)"
-   merge feature/X id:"4 (FF)"
-   checkout main
-   merge PR-1 id:"5 (SQUASH)" type:HIGHLIGHT
-```
-
-# Scenario 5 - Production Fix
+# Scenario 4 - Release via Branch
 
 ```mermaid
 ---
-title: |
-  policies:
-    release/* = full,
-    pfix/* = ?,
-    PR-* = PR-validation,
-    main = full
+title: Release via Branch
 ---
 gitGraph
-   commit id:"5 - initial state"
-   branch release/v2.3
-   checkout release/v2.3
-   commit id:"5 (FF)"
-   branch pfix/inc100
-   checkout pfix/inc100
-   commit id:"6"
-   branch PR-2
-   checkout PR-2
-   commit id:"6 (FF)"
-   checkout release/v2.3
-   merge PR-2 id:"7"
-   branch PR-3
-   checkout PR-3
-   commit id:"7 (FF)"
-   checkout main
-   merge PR-3 id:"8"
+  commit id:"α (initial state)"
+  branch feature/X
+  checkout feature/X
+  commit id:"α (X branch)"
+  checkout main
+  branch feature/Y
+  checkout feature/Y
+  commit id:"α (Y branch)"
+  checkout feature/X
+  commit id:"β"
+  branch PR-x
+  checkout PR-x
+  commit id:"β (PR)"
+  checkout feature/Y
+  commit id:"γ"
+  checkout feature/X
+  commit id:"δ"
+  checkout PR-x
+  merge feature/X id:"δ (PR)"
+  checkout main
+  merge PR-x id:"ε"
+  branch "release/1.0"
+  checkout "release/1.0"
+  commit id:"ε (branch)"
+  checkout feature/Y
+  commit id:"ζ"
+  branch PR-y
+  checkout PR-y
+  commit id:"ζ (PR)"
+  checkout main
+  merge PR-y id:"η"
+  checkout "release/1.0"
+  branch "pfix/INC01"
+  checkout "pfix/INC01"
+  commit id:"ε (pfix branch)"
+  commit id:"θ"
+  branch PR-INC01
+  checkout PR-INC01
+  commit id:"θ (PR)"
+  checkout "release/1.0"
+  merge PR-INC01 id:"ι"
+  checkout main
+  merge "release/1.0" id:"κ"
 ```
+
+| event        | branch/tag  | build  | deploy |
+|--------------|-------------|--------|--------|
+| push         | `feature/*` | QUICK  | No     |
+| pull_request | `main`      | NORMAL | No     |
+| push         | `main`      | NORMAL | No     |
+| push         | `release/*` | FULL   | Yes    |
+| pull_request | `release/*` | FULL   | No     |
+| push         | `pfix/*`    | QUICK  | No     |
+
+
+# Scenario 5 - Release via Tag
+
+```mermaid
+---
+title: Release via Tag
+---
+gitGraph
+  commit id:"α (initial state)"
+  branch feature/X
+  checkout feature/X
+  commit id:"α (X branch)"
+  checkout main
+  branch feature/Y
+  checkout feature/Y
+  commit id:"α (Y branch)"
+  checkout feature/X
+  commit id:"β"
+  branch PR-x
+  checkout PR-x
+  commit id:"β (PR)"
+  checkout feature/Y
+  commit id:"γ"
+  checkout feature/X
+  commit id:"δ"
+  checkout PR-x
+  merge feature/X id:"δ (PR)"
+  checkout main
+  merge PR-x id:"ε" tag: "v1.0.0"
+
+  checkout feature/Y
+  commit id:"ζ"
+  branch PR-y
+  checkout PR-y
+  commit id:"ζ (PR)"
+  checkout main
+  merge PR-y id:"η"
+
+  branch "pfix/INC01"
+  checkout "pfix/INC01"
+  commit id:"ε (pfix branch)"
+  commit id:"θ" tag:"v1.0.1"
+  branch PR-INC01
+  checkout PR-INC01
+  commit id:"θ (PR)"
+
+  checkout main
+  merge PR-INC01 id:"ι"
+```
+
+| event        | branch/tag  | build  | deploy |
+|--------------|-------------|--------|--------|
+| push         | `feature/*` | QUICK  | No     |
+| pull_request | `main`      | NORMAL | No     |
+| push         | `main`      | NORMAL | No     |
+| create_tag   | `v*`        | FULL   | Yes    |
+| push         | `pfix/*`    | FULL   | No     |
 
 # Scenario 1 - release branch as production snapshot
 
