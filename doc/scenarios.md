@@ -1,5 +1,5 @@
 > TODO: check `github` context from a called workflow  
-> NOTE: team can opt for a specific pattern via an input parameter
+> NOTE: team can opt for a specific pattern via an input parameter  
 > TIP: https://github.com/actions/runner/issues/2473
 
 # Scenario 4 - Release via Branch
