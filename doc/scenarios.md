@@ -1,3 +1,61 @@
+
+# Scenario 4 - feature
+
+```mermaid
+---
+title: |
+  policies:
+    feature/* = quick,
+    PR-* = PR-validation,
+    main = full
+---
+gitGraph
+   commit id:"1 - initial state"
+   branch feature/X
+   checkout feature/X
+   commit id:"2"
+   commit id:"3"
+   branch PR-1
+   checkout feature/X
+   commit id:"4"
+   checkout PR-1
+   commit id:"3 (FF)"
+   merge feature/X id:"4 (FF)"
+   checkout main
+   merge PR-1 id:"5 (SQUASH)" type:HIGHLIGHT
+```
+
+# Scenario 5 - Production Fix
+
+```mermaid
+---
+title: |
+  policies:
+    release/* = full,
+    pfix/* = ?,
+    PR-* = PR-validation,
+    main = full
+---
+gitGraph
+   commit id:"5 - initial state"
+   branch release/v2.3
+   checkout release/v2.3
+   commit id:"5 (FF)"
+   branch pfix/inc100
+   checkout pfix/inc100
+   commit id:"6"
+   branch PR-2
+   checkout PR-2
+   commit id:"6 (FF)"
+   checkout release/v2.3
+   merge PR-2 id:"7"
+   branch PR-3
+   checkout PR-3
+   commit id:"7 (FF)"
+   checkout main
+   merge PR-3 id:"8"
+```
+
 # Scenario 1 - release branch as production snapshot
 
 Promoting build b101 to UAT automatically creates the Release and related Change ticket;
