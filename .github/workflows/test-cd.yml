@@ -1,0 +1,9 @@
+name: CD Tester
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+
+jobs:
+  the-job:
+    uses: CasaVian/actions-demos/.github/workflows/cd.yml@main
