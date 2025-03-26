@@ -6,11 +6,11 @@ on:
         required: true
         type: string
         description: "Target Environment"
-      target-group:
+      runner-group:
         required: true
         type: string
         description: "Target Runner Group"
-      target-label:
+      runner-label:
         required: true
         type: string
         description: "Target Runner Label"
@@ -26,8 +26,8 @@ jobs:
           script: script2.sh
       fail-fast: false
     runs-on: ubuntu-latest
-#      group: ${{ inputs.target-group }}
-#      label: ${{ inputs.target-label }}
+#      group: ${{ inputs.runner-group }}
+#      label: ${{ inputs.runner-label }}
     steps:
     - name: Dump GitHub context
       env:
@@ -49,4 +49,4 @@ jobs:
     - name: "Dummy deploy to ${{ matrix.node.name }}"
       run: |
         echo "Running script ${{ matrix.node.script }}"
-        echo "  via Runner group: ${{ inputs.target-group }}, label: ${{ inputs.target-label }}"
+        echo "  via Runner group: ${{ inputs.runner-group }}, label: ${{ inputs.runner-label }}"

@@ -14,12 +14,11 @@ jobs:
         target: ${{ fromJSON( inputs.envs ) }}
       fail-fast: true
       max-parallel: 1
-    runs-on: ubuntu-latest
     environment:
       name: ${{ matrix.target.env }}
     uses: CasaVian/actions-demos/.github/workflows/cd-env.yml@main
     with:
       target-env: ${{ matrix.target.env }}
-      target-group: ${{ matrix.target.runner-group }}
-      target-label: ${{ matrix.target.runner-label }}
+      runner-group: ${{ matrix.target.runner-group }}
+      runner-label: ${{ matrix.target.runner-label }}
       release-action: ${{ matrix.target.release-action }}

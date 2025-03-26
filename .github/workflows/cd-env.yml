@@ -6,11 +6,11 @@ on:
         required: true
         type: string
         description: "Target Environment"
-      target-group:
+      runner-group:
         required: true
         type: string
         description: "Target Runner Group"
-      target-label:
+      runner-label:
         required: true
         type: string
         description: "Target Runner Label"
@@ -22,6 +22,7 @@ on:
 jobs:
 
   pre-deploy:
+    runs-on: ubuntu-latest
     steps:
     - name: "Pre-deploy ${{ inputs.release-action }} Release"
       run: |
@@ -34,8 +35,8 @@ jobs:
     uses: CasaVian/actions-demos/.github/workflows/cd-deploy.yml@main
     with:
       target-env: ${{ inputs.target-env }}
-      target-group: ${{ inputs.runner-group }}
-      target-label: ${{ inputs.runner-label }}
+      runner-group: ${{ inputs.runner-group }}
+      runner-label: ${{ inputs.runner-label }}
 
   post-deploy:
     needs: [deploy]
