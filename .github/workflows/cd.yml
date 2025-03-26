@@ -1,23 +1,18 @@
 name: Promote
 on:
   workflow_call:
+    inputs:
+      envs:
+        required: true
+        type: string
+        description: "Environments (stringified JSON)"
+        defaults: '[ { "env":"Dev", "runner-group": "on-prem-non-prod", "runner-label": "app-01" }, { "env":"Uat", "release": "open", "runner-group": "on-prem-sub-prod", "runner-label": "app-01" }, { "env":"Prod", "release": "close", "runner-group": "on-prem-prod", "runner-label": "app-01" } ]'
+
 jobs:
   orchestrate:
     strategy:
       matrix:
-        target:
-        # order matters!
-        - env: Dev
-          runner-group: "on-prem-non-prod"
-          runner-label: "app-01"
-        - env: Uat
-          release: open
-          runner-group: "on-prem-sub-prod"
-          runner-label: "app-01"
-        - env: Prod
-          release: close
-          runner-group: "on-prem-prod"
-          runner-label: "app-01"
+        target: ${{ fromJSON( inputs.envs ) }}
       fail-fast: true
       max-parallel: 1
     runs-on: ubuntu-latest
@@ -46,9 +41,13 @@ jobs:
         echo "Release should be ${{ matrix.target.release }}"
       if: matrix.target.release != ''
 
-    - name: "Deploy on ${{ matrix.target.env }}"
-      uses: ./.github/workflows/cd-deploy-env.yml
-      with:
-        target-env: ${{ matrix.target.env }}
-        target-group: ${{ matrix.target.runner-group }}
-        target-label: ${{ matrix.target.runner-label }}
+  deploy:
+    strategy:
+      matrix:
+        target: ${{ fromJSON( inputs.envs ) }}
+    name: "Deploy on ${{ matrix.target.env }}"
+    uses: CasaVian/actions-demos/.github/workflows/cd-deploy-env.yml@main
+    with:
+      target-env: ${{ matrix.target.env }}
+      target-group: ${{ matrix.target.runner-group }}
+      target-label: ${{ matrix.target.runner-label }}
