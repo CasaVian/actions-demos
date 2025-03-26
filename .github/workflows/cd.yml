@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ matrix.target.env }}
-    name: "Deploy on ${{ matrix.target.env }}"
     uses: CasaVian/actions-demos/.github/workflows/cd-env.yml@main
     with:
       target-env: ${{ matrix.target.env }}

@@ -23,27 +23,27 @@ jobs:
 
   pre-deploy:
     steps:
-    - name: "Pre-deploy ${{ matrix.target.release }} Release"
+    - name: "Pre-deploy ${{ inputs.release-action }} Release"
       run: |
-        echo "Release should be ${{ matrix.target.release }}"
-      if: matrix.target.release != ''
+        echo "Release should be ${{ inputs.release-action }}"
+      if: inputs.release-action != ''
 
   deploy:
     needs: [pre-deploy]
-    name: "Deploy on ${{ matrix.target.env }}"
+    name: "Deploy on ${{ inputs.target-env }}"
     uses: CasaVian/actions-demos/.github/workflows/cd-deploy.yml@main
     with:
-      target-env: ${{ matrix.target.env }}
-      target-group: ${{ matrix.target.runner-group }}
-      target-label: ${{ matrix.target.runner-label }}
+      target-env: ${{ inputs.target-env }}
+      target-group: ${{ inputs.runner-group }}
+      target-label: ${{ inputs.runner-label }}
 
   post-deploy:
     needs: [deploy]
     runs-on: ubuntu-latest
     environment:
-      name: ${{ matrix.target.env }}
+      name: ${{ inputs.target-env }}
     steps:
-    - name: "Post-deploy ${{ matrix.target.release }} Release"
+    - name: "Post-deploy ${{ inputs.release-action }} Release"
       run: |
-        echo "Release should be ${{ matrix.target.release }}"
-      if: matrix.target.release != ''
+        echo "Release should be ${{ inputs.release-action }}"
+      if: inputs.release-action != ''
