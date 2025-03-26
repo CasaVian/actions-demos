@@ -8,7 +8,7 @@ on:
         description: "Environments (stringified JSON)"
 
 jobs:
-  pre-deploy:
+  promote:
     strategy:
       matrix:
         target: ${{ fromJSON( inputs.envs ) }}
@@ -17,52 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ matrix.target.env }}
-    steps:
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
-    - name: Dump job context
-      env:
-        JOB_CONTEXT: ${{ toJson(job) }}
-      run: echo "$JOB_CONTEXT"
-    - name: Dump strategy context
-      env:
-        STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-      run: echo "$STRATEGY_CONTEXT"
-    - name: Dump matrix context
-      env:
-        MATRIX_CONTEXT: ${{ toJson(matrix) }}
-      run: echo "$MATRIX_CONTEXT"
-    - name: "Pre-deploy ${{ matrix.target.release }} Release"
-      run: |
-        echo "Release should be ${{ matrix.target.release }}"
-      if: matrix.target.release != ''
-
-  deploy:
-    needs: [pre-deploy]
-    strategy:
-      matrix:
-        target: ${{ fromJSON( inputs.envs ) }}
     name: "Deploy on ${{ matrix.target.env }}"
-    uses: CasaVian/actions-demos/.github/workflows/cd-deploy-env.yml@main
+    uses: CasaVian/actions-demos/.github/workflows/cd-env.yml@main
     with:
       target-env: ${{ matrix.target.env }}
       target-group: ${{ matrix.target.runner-group }}
       target-label: ${{ matrix.target.runner-label }}
-
-  post-deploy:
-    needs: [deploy]
-    strategy:
-      matrix:
-        target: ${{ fromJSON( inputs.envs ) }}
-      fail-fast: true
-      max-parallel: 1
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ matrix.target.env }}
-    steps:
-    - name: "Post-deploy ${{ matrix.target.release }} Release"
-      run: |
-        echo "Release should be ${{ matrix.target.release }}"
-      if: matrix.target.release != ''
+      release-action: ${{ matrix.target.release-action }}

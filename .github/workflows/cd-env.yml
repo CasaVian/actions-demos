@@ -1,0 +1,49 @@
+name: Deploy
+on:
+  workflow_call:
+    inputs:
+      target-env:
+        required: true
+        type: string
+        description: "Target Environment"
+      target-group:
+        required: true
+        type: string
+        description: "Target Runner Group"
+      target-label:
+        required: true
+        type: string
+        description: "Target Runner Label"
+      release-action:
+        required: true
+        type: string
+        description: "Release Action"
+
+jobs:
+
+  pre-deploy:
+    steps:
+    - name: "Pre-deploy ${{ matrix.target.release }} Release"
+      run: |
+        echo "Release should be ${{ matrix.target.release }}"
+      if: matrix.target.release != ''
+
+  deploy:
+    needs: [pre-deploy]
+    name: "Deploy on ${{ matrix.target.env }}"
+    uses: CasaVian/actions-demos/.github/workflows/cd-deploy.yml@main
+    with:
+      target-env: ${{ matrix.target.env }}
+      target-group: ${{ matrix.target.runner-group }}
+      target-label: ${{ matrix.target.runner-label }}
+
+  post-deploy:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ matrix.target.env }}
+    steps:
+    - name: "Post-deploy ${{ matrix.target.release }} Release"
+      run: |
+        echo "Release should be ${{ matrix.target.release }}"
+      if: matrix.target.release != ''

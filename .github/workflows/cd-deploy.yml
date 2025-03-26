@@ -18,6 +18,7 @@ jobs:
   deploy:
     strategy:
       matrix:
+        # TODO move to inputs
         node:
         - name: Server1
           script: script1.ps1
