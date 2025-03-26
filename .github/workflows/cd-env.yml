@@ -23,6 +23,8 @@ jobs:
 
   pre-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ matrix.target.env }}
     steps:
     - name: "Pre-deploy ${{ inputs.release-action }} Release"
       run: |
@@ -32,6 +34,8 @@ jobs:
   deploy:
     needs: [pre-deploy]
     name: "Deploy on ${{ inputs.target-env }}"
+    environment:
+      name: ${{ matrix.target.env }}
     uses: CasaVian/actions-demos/.github/workflows/cd-deploy.yml@main
     with:
       target-env: ${{ inputs.target-env }}

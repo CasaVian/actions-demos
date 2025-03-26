@@ -14,8 +14,6 @@ jobs:
         target: ${{ fromJSON( inputs.envs ) }}
       fail-fast: true
       max-parallel: 1
-    environment:
-      name: ${{ matrix.target.env }}
     uses: CasaVian/actions-demos/.github/workflows/cd-env.yml@main
     with:
       target-env: ${{ matrix.target.env }}
