@@ -1,4 +1,4 @@
-name: Deploy
+name: Target Deploy
 on:
   workflow_call:
     inputs:
@@ -15,7 +15,9 @@ on:
         type: string
         description: "Target Runner Label"
 jobs:
-  deploy:
+  deploy-on-target:
+    environment:
+      name: ${{ inputs.target-env }}
     strategy:
       matrix:
         # TODO move to inputs
