@@ -1,0 +1,51 @@
+name: Deploy
+on:
+  workflow_call:
+    inputs:
+      target-env:
+        required: true
+        type: string
+        description: "Target Environment"
+      target-group:
+        required: true
+        type: string
+        description: "Target Runner Group"
+      target-label:
+        required: true
+        type: string
+        description: "Target Runner Label"
+jobs:
+  deploy:
+    strategy:
+      matrix:
+        node:
+        - name: Server1
+          script: script1.ps1
+        - name: Server2
+          script: script2.sh
+      fail-fast: false
+    runs-on: ubuntu-latest
+#      group: ${{ inputs.target-group }}
+#      label: ${{ inputs.target-label }}
+    steps:
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+    - name: Dump job context
+      env:
+        JOB_CONTEXT: ${{ toJson(job) }}
+      run: echo "$JOB_CONTEXT"
+    - name: Dump strategy context
+      env:
+        STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+      run: echo "$STRATEGY_CONTEXT"
+    - name: Dump matrix context
+      env:
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+      run: echo "$MATRIX_CONTEXT"
+    # emulate deploy      
+    - name: "Dummy deploy to ${{ matrix.node.name }}"
+      run: |
+        echo "Running script ${{ matrix.node.script }}"
+        echo "  via Runner group: ${{ inputs.target-group }}, label: ${{ inputs.target-label }}"
