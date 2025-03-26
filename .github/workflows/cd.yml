@@ -40,7 +40,7 @@ jobs:
       if: matrix.target.release != ''
 
   deploy:
-    needs: [orchestrate]
+    needs: [pre-deploy]
     strategy:
       matrix:
         target: ${{ fromJSON( inputs.envs ) }}
