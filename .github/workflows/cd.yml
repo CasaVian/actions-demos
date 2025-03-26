@@ -6,7 +6,6 @@ on:
         required: true
         type: string
         description: "Environments (stringified JSON)"
-        default: '[ { "env":"Dev", "runner-group": "on-prem-non-prod", "runner-label": "app-01" }, { "env":"Uat", "release": "open", "runner-group": "on-prem-sub-prod", "runner-label": "app-01" }, { "env":"Prod", "release": "close", "runner-group": "on-prem-prod", "runner-label": "app-01" } ]'
 
 jobs:
   pre-deploy:

@@ -7,3 +7,6 @@ on:
 jobs:
   the-job:
     uses: CasaVian/actions-demos/.github/workflows/cd.yml@main
+    with:
+      envs: '[ { "env":"Dev", "runner-group": "on-prem-non-prod", "runner-label": "app-01" }, { "env":"Uat", "release": "open", "runner-group": "on-prem-sub-prod", "runner-label": "app-01" }, { "env":"Prod", "release": "close", "runner-group": "on-prem-prod", "runner-label": "app-01" } ]'
+
