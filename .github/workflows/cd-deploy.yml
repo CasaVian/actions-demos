@@ -16,8 +16,8 @@ on:
         description: "Target Runner Label"
 jobs:
   deploy-on-target:
-    environment:
-      name: ${{ inputs.target-env }}
+    # environment:
+    #   name: ${{ inputs.target-env }}
     strategy:
       matrix:
         # TODO move to inputs
@@ -27,7 +27,7 @@ jobs:
         - name: Server2
           script: script2.sh
       fail-fast: false
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # HACK for testing, should be the two lines below
 #      group: ${{ inputs.runner-group }}
 #      label: ${{ inputs.runner-label }}
     steps:

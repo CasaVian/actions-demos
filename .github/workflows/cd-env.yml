@@ -43,8 +43,8 @@ jobs:
   post-deploy:
     needs: [deploy]
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.target-env }}
+    # environment:
+    #   name: ${{ inputs.target-env }}
     steps:
     - name: "Post-deploy ${{ inputs.release-action }} Release"
       run: |
